@@ -1,6 +1,8 @@
-import type { NextConfig } from "next";
+import { withPayload } from '@payloadcms/next/withPayload'
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Your Next.js config here
   images: {
     remotePatterns: [
       {
@@ -9,6 +11,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-};
+  cacheComponents: true,
+}
 
-export default nextConfig;
+// Make sure you wrap your `nextConfig`
+// with the `withPayload` plugin
+export default withPayload(nextConfig) 
