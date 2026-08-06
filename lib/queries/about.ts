@@ -16,7 +16,7 @@ export type AboutDoc = {
   }[]
 }
 
-/** The /about page content — headline, manifesto, values, team. */
+/** The about page content — headline, manifesto, values, team. */
 export const getAboutPage = unstable_cache(
   async (): Promise<AboutDoc> => {
     const payload = await getPayloadClient()
