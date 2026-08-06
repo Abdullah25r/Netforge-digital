@@ -3,6 +3,7 @@ import PageHeader from "../../../components/sections/PageHeader";
 import StickyCaseStudies from "../../../components/sections/StickyCaseStudies";
 import PortfolioGrid from "../../../components/sections/PortfolioGrid";
 import CTASection from "../../../components/sections/CTASection";
+import { getFeaturedCaseStudies, getSmallProjects } from "../../../data/portfolio";
 
 export const metadata: Metadata = {
   title: "Our Work — NetForge Digital",
@@ -10,7 +11,12 @@ export const metadata: Metadata = {
     "Case studies and selected projects from NetForge Digital — real results for real Dubai businesses.",
 };
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const [caseStudies, smallProjects] = await Promise.all([
+    getFeaturedCaseStudies(),
+    getSmallProjects(),
+  ]);
+
   return (
     <>
       <PageHeader
@@ -19,8 +25,8 @@ export default function WorkPage() {
         subtitle="A look at how we've moved the needle for brands across Dubai and the UAE — scroll through the highlights."
         crumb="Work"
       />
-      <StickyCaseStudies />
-      <PortfolioGrid />
+      <StickyCaseStudies caseStudies={caseStudies} />
+      <PortfolioGrid projects={smallProjects} />
       <CTASection />
     </>
   );

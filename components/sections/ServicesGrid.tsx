@@ -10,7 +10,7 @@ import {
   MagnifyingGlass,
   type IconProps,
 } from "@phosphor-icons/react";
-import { services } from "../../data/services";
+import type { Service } from "../../data/services";
 import { fadeUp, staggerContainer } from "../../lib/utils";
 
 const ICONS: Record<string, React.ComponentType<IconProps>> = {
@@ -22,16 +22,14 @@ const ICONS: Record<string, React.ComponentType<IconProps>> = {
   MagnifyingGlass,
 };
 
-const LAYOUT: Record<string, string> = {
-  web: "lg:col-span-3 lg:row-span-2",
-  marketing: "lg:col-span-2 lg:row-span-2",
-  brand: "lg:col-span-1 lg:row-span-1",
-  social: "lg:col-span-1 lg:row-span-1",
-  ecommerce: "lg:col-span-2 lg:row-span-2",
-  analytics: "lg:col-span-4 lg:row-span-1",
+const SIZE_CLASSES: Record<Service["bentoSize"], string> = {
+  large: "lg:col-span-3 lg:row-span-2",
+  tall: "lg:col-span-2 lg:row-span-2",
+  wide: "lg:col-span-4 lg:row-span-1",
+  small: "lg:col-span-1 lg:row-span-1",
 };
 
-export default function ServicesGrid() {
+export default function ServicesGrid({ services }: { services: Service[] }) {
   return (
     <section className="relative section-pad bg-[var(--bg-void)]">
       <div className="container-xl">
@@ -61,7 +59,7 @@ export default function ServicesGrid() {
               <motion.div
                 key={service.id}
                 variants={fadeUp}
-                className={`glass-card group relative p-7 overflow-hidden ${LAYOUT[service.id]}`}
+                className={`glass-card group relative p-7 overflow-hidden ${SIZE_CLASSES[service.bentoSize]}`}
                 data-cursor-hover
               >
                 <div

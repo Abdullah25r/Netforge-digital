@@ -11,8 +11,8 @@ import {
   CheckCircle,
   type IconProps,
 } from "@phosphor-icons/react";
-import { services } from "../../data/services";
-import MagneticButton from "../ui/MagneticButton";
+import type { Service } from "../../data/services";
+import MagneticButton from "../../components/ui/MagneticButton";
 
 const ICONS: Record<string, React.ComponentType<IconProps>> = {
   Code,
@@ -22,7 +22,9 @@ const ICONS: Record<string, React.ComponentType<IconProps>> = {
   ShoppingCart,
 };
 
-export default function ServicesTabs() {
+export default function ServicesTabs({ services }: { services: Service[] }) {
+  if (services.length === 0) return null;
+
   return (
     <section className="section-pad bg-[var(--bg-void)]">
       <div className="container-xl">

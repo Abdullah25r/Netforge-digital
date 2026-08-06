@@ -5,13 +5,16 @@ import StatsBar from "../../components/sections/StatsBar";
 import ROISection from "../../components/sections/ROISection";
 import TestimonialsSection from "../../components/sections/TestimonialsSection";
 import CTASection from "../../components/sections/CTASection";
+import { getFeaturedServices } from "../../data/services";
 
-export default function Home() {
+export default async function Home() {
+  const services = await getFeaturedServices();
+
   return (
     <>
       <HeroSection />
       <TrustedBySection />
-      <ServicesGrid />
+      <ServicesGrid services={services} />
       <StatsBar />
       <ROISection />
       <TestimonialsSection />

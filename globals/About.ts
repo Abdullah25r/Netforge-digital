@@ -10,6 +10,7 @@ export const About: GlobalConfig = {
   },
   admin: {
     description: 'Content for the /about page.',
+    group: 'Pages',
   },
   fields: [
     // ── Hero ──

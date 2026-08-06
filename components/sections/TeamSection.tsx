@@ -1,12 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { LinkedinLogo, TwitterLogo } from "@phosphor-icons/react";
-import GlassCard from "../ui/GlassCard";
-import { team } from "../../data/team";
+import GlassCard from "../../components/ui/GlassCard";
+import type { TeamMember } from "../../data/team";
 import { fadeUp, staggerContainer } from "../../lib/utils";
 
-export default function TeamSection() {
+export default function TeamSection({
+  team,
+  heading = "Meet the People Behind the Work",
+}: {
+  team: TeamMember[];
+  heading?: string;
+}) {
+  if (team.length === 0) return null;
+
   return (
     <section className="section-pad bg-[var(--bg-elevated)]">
       <div className="container-xl">
@@ -19,7 +28,7 @@ export default function TeamSection() {
         >
           <p className="eyebrow mb-4">The Team</p>
           <h2 className="font-display font-bold" style={{ fontSize: "var(--text-xl)" }}>
-            Meet the People Behind the Work
+            {heading}
           </h2>
         </motion.div>
 
@@ -33,11 +42,14 @@ export default function TeamSection() {
           {team.map((member) => (
             <motion.div key={member.id} variants={fadeUp}>
               <GlassCard className="group p-6 text-center transition-transform duration-300 hover:-translate-y-2" hoverGlow>
-                <div
-                  className="w-20 h-20 rounded-full mx-auto mb-5 flex items-center justify-center font-display font-bold text-2xl"
-                  style={{ background: "linear-gradient(135deg, #00c8e0, #6c3fff)", color: "#030308" }}
-                >
-                  {member.initials}
+                <div className="relative w-20 h-20 rounded-full mx-auto mb-5 overflow-hidden">
+                  <Image
+                    src={member.photo}
+                    alt={member.name}
+                    fill
+                    className="object-cover"
+                    sizes="80px"
+                  />
                 </div>
                 <h3 className="font-display font-semibold">{member.name}</h3>
                 <p className="text-sm text-[var(--text-secondary)] mb-4">{member.role}</p>

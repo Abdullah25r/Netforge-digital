@@ -1,20 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-import { smallProjects } from "../../data/portfolio";
+import type { SmallProject } from "../../data/portfolio";
 import { fadeUp, staggerContainer } from "../../lib/utils";
 
-const FILTERS = ["All", "Web Dev", "Marketing", "Brand", "E-Commerce"];
-
-export default function PortfolioGrid() {
+export default function PortfolioGrid({ projects }: { projects: SmallProject[] }) {
   const [active, setActive] = useState("All");
 
+  // Filters are derived from whatever categories actually come back from the
+  // CMS (relates to your `categories` collection) instead of a fixed list.
+  const filters = useMemo(() => {
+    const unique = Array.from(new Set(projects.map((p) => p.category).filter(Boolean)));
+    return ["All", ...unique];
+  }, [projects]);
+
   const filtered =
-    active === "All"
-      ? smallProjects
-      : smallProjects.filter((p) => p.category === active);
+    active === "All" ? projects : projects.filter((p) => p.category === active);
 
   return (
     <section className="section-pad bg-[var(--bg-void)]">
@@ -33,7 +36,7 @@ export default function PortfolioGrid() {
 
           <LayoutGroup>
             <div className="flex flex-wrap gap-2">
-              {FILTERS.map((f) => (
+              {filters.map((f) => (
                 <button
                   key={f}
                   onClick={() => setActive(f)}

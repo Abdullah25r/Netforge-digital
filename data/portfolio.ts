@@ -1,3 +1,11 @@
+import {
+  getCaseStudies as fetchCaseStudies,
+  getFeaturedCaseStudies as fetchFeaturedCaseStudies,
+  getSelectedCaseStudies as fetchSelectedCaseStudies,
+  getCaseStudyBySlug as fetchCaseStudyBySlug,
+} from "../lib/queries/case-studies";
+import type { CaseStudyDoc } from "../lib/queries/case-studies";
+
 export type CaseStudy = {
   id: string;
   title: string;
@@ -10,98 +18,67 @@ export type CaseStudy = {
   tags: string[];
 };
 
-export const caseStudies: CaseStudy[] = [
-  {
-    id: "bloom-beauty",
-    title: "Bloom Beauty Lounge",
-    category: "Ladies salon, Al Barsha",
-    services: "Web + Instagram + Google Ads",
-    result: "+200% bookings in 90 days",
-    image:
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80",
-    accent: "#ff6b9d",
-    gradient: "linear-gradient(135deg, #ff6b9d, #ff9a8b)",
-    tags: ["Web Dev", "Marketing", "Social Media"],
-  },
-  {
-    id: "gulf-apex",
-    title: "Gulf Apex Tech",
-    category: "B2B SaaS",
-    services: "SEO + Content + Google Ads",
-    result: "+380% organic traffic",
-    image:
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
-    accent: "#00c8e0",
-    gradient: "linear-gradient(135deg, #00c8e0, #0080ff)",
-    tags: ["Marketing", "Analytics"],
-  },
-  {
-    id: "zayara",
-    title: "Zayara Boutique",
-    category: "Fashion e-commerce",
-    services: "Shopify + Meta Ads",
-    result: "3.2× ROAS",
-    image:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80",
-    accent: "#6c3fff",
-    gradient: "linear-gradient(135deg, #6c3fff, #0080ff)",
-    tags: ["E-Commerce", "Marketing"],
-  },
-  {
-    id: "noor-real-estate",
-    title: "Noor Real Estate",
-    category: "Property listings",
-    services: "Web + SEO",
-    result: "#1 Google for 14 keywords",
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
-    accent: "#0080ff",
-    gradient: "linear-gradient(135deg, #0080ff, #00c8e0)",
-    tags: ["Web Dev", "Analytics"],
-  },
-];
+export type SmallProject = {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+};
 
-export const smallProjects = [
-  {
-    id: "peakfit",
-    title: "PeakFit Studio",
-    category: "Web Dev",
-    image:
-      "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80",
-  },
-  {
-    id: "almasdar",
-    title: "AlMasdar Co",
-    category: "Brand",
-    image:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80",
-  },
-  {
-    id: "trademark-ae",
-    title: "TradeMark AE",
-    category: "Marketing",
-    image:
-      "https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=800&q=80",
-  },
-  {
-    id: "velocity-bd",
-    title: "Velocity BD",
-    category: "E-Commerce",
-    image:
-      "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&q=80",
-  },
-  {
-    id: "bloom-wellness",
-    title: "Bloom Wellness",
-    category: "Web Dev",
-    image:
-      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
-  },
-  {
-    id: "gulf-apex-brand",
-    title: "Gulf Apex Tech",
-    category: "Brand",
-    image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
-  },
-];
+function resolveImageUrl(
+  image: CaseStudyDoc["coverImage"]
+): string {
+  return typeof image === "string" ? image : image?.url ?? "";
+}
+
+/** Builds a two-stop diagonal gradient from a single accent hex color. */
+function gradientFromAccent(accent: string): string {
+  return `linear-gradient(135deg, ${accent}, ${accent}cc)`;
+}
+
+function mapCaseStudy(doc: CaseStudyDoc): CaseStudy {
+  const tags = doc.categories.map((c) => c.title);
+  return {
+    id: doc.slug,
+    title: doc.title,
+    category: doc.client ?? tags[0] ?? "",
+    services: doc.servicesProvided ?? "",
+    result: doc.resultHighlight,
+    image: resolveImageUrl(doc.coverImage),
+    accent: doc.accentColor,
+    gradient: gradientFromAccent(doc.accentColor),
+    tags,
+  };
+}
+
+function mapSmallProject(doc: CaseStudyDoc): SmallProject {
+  return {
+    id: doc.slug,
+    title: doc.title,
+    category: doc.categories[0]?.title ?? "",
+    image: resolveImageUrl(doc.coverImage),
+  };
+}
+
+/** All case studies, most recent first. */
+export async function getCaseStudies(): Promise<CaseStudy[]> {
+  const docs = await fetchCaseStudies();
+  return docs.map(mapCaseStudy);
+}
+
+/** Featured only — powers the sticky horizontal-scroll section on /work. */
+export async function getFeaturedCaseStudies(): Promise<CaseStudy[]> {
+  const docs = await fetchFeaturedCaseStudies();
+  return docs.map(mapCaseStudy);
+}
+
+/** Non-featured — powers the smaller Selected Projects grid on /work. */
+export async function getSmallProjects(): Promise<SmallProject[]> {
+  const docs = await fetchSelectedCaseStudies();
+  return docs.map(mapSmallProject);
+}
+
+/** Single case study by slug, with full detail fields (gallery, content). */
+export async function getCaseStudyBySlug(slug: string) {
+  return fetchCaseStudyBySlug(slug);
+}

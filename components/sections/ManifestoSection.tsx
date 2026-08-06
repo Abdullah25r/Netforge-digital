@@ -2,12 +2,6 @@
 
 import { motion } from "framer-motion";
 
-const PARAGRAPHS = [
-  "We started NetForge Digital because we were tired of agencies that overcharge, under-deliver, and disappear after the contract is signed.",
-  "Every strategy we build, every pixel we place, every campaign we launch is designed with one question: does this generate real, measurable results for our client?",
-  "Dubai's business landscape is competitive. We exist to give ambitious brands the digital edge they need to win it.",
-];
-
 function WordReveal({ text, delayOffset }: { text: string; delayOffset: number }) {
   const words = text.split(" ");
   return (
@@ -35,11 +29,13 @@ function WordReveal({ text, delayOffset }: { text: string; delayOffset: number }
   );
 }
 
-export default function ManifestoSection() {
+export default function ManifestoSection({ paragraphs }: { paragraphs: string[] }) {
+  if (paragraphs.length === 0) return null;
+
   return (
     <section className="section-pad bg-[var(--bg-elevated)] clip-chevron-down">
       <div className="container-xl space-y-16">
-        {PARAGRAPHS.map((p, i) => (
+        {paragraphs.map((p, i) => (
           <WordReveal key={i} text={p} delayOffset={0} />
         ))}
       </div>

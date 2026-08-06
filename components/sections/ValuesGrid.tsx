@@ -1,11 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import GlassCard from "../ui/GlassCard";
-import { values } from "../../data/team";
+import GlassCard from "../../components/ui/GlassCard";
+import type { Value } from "../../data/team";
 import { fadeUp, staggerContainer } from "../../lib/utils";
 
-export default function ValuesGrid() {
+export default function ValuesGrid({
+  values,
+  heading = "Our Values",
+}: {
+  values: Value[];
+  heading?: string;
+}) {
+  if (values.length === 0) return null;
+
   return (
     <section className="section-pad bg-[var(--bg-void)]">
       <div className="container-xl">
@@ -18,7 +26,7 @@ export default function ValuesGrid() {
         >
           <p className="eyebrow mb-4">What Drives Us</p>
           <h2 className="font-display font-bold" style={{ fontSize: "var(--text-xl)" }}>
-            Our Values
+            {heading}
           </h2>
         </motion.div>
 

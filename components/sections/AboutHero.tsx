@@ -11,7 +11,13 @@ const PHOTOS = [
   "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80",
 ];
 
-export default function AboutHero() {
+export default function AboutHero({
+  headline,
+  subheadline,
+}: {
+  headline: string;
+  subheadline?: string;
+}) {
   return (
     <section className="section-pad bg-[var(--bg-void)]">
       <div className="container-xl grid lg:grid-cols-2 gap-16 items-center">
@@ -29,13 +35,13 @@ export default function AboutHero() {
             className="font-display font-bold tracking-[-0.03em]"
             style={{ fontSize: "var(--text-xl)" }}
           >
-            We&rsquo;re a Lean Team of Obsessives Who Hate{" "}
-            <span className="text-gradient-clip">Average Results</span>
+            {headline}
           </motion.h1>
-          <motion.p variants={fadeUp} className="text-[var(--text-secondary)] mt-6 max-w-md">
-            No account bloat, no junior hand-offs. Every project runs through
-            senior hands, start to finish.
-          </motion.p>
+          {subheadline && (
+            <motion.p variants={fadeUp} className="text-[var(--text-secondary)] mt-6 max-w-md">
+              {subheadline}
+            </motion.p>
+          )}
         </motion.div>
 
         <motion.div

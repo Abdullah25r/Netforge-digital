@@ -1,23 +1,16 @@
+import type { NextConfig } from 'next'
 import { withPayload } from '@payloadcms/next/withPayload'
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Your Next.js config here
-  
+const nextConfig: NextConfig = {
+  cacheComponents: true,
+  images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-      {
-        protocol: "https",
-        hostname: "*.public.blob.vercel-storage.com"
-      }
     ],
-  
-  cacheComponents: true,
+  },
 }
 
-// Make sure you wrap your `nextConfig`
-// with the `withPayload` plugin
-export default withPayload(nextConfig) 
+export default withPayload(nextConfig)

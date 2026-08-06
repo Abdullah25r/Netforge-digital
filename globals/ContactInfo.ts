@@ -11,6 +11,7 @@ export const ContactInfo: GlobalConfig = {
   },
   admin: {
     description: 'Site-wide contact details shown on the /contact page (right column) and footer.',
+    group: 'Pages',
   },
   fields: [
     {

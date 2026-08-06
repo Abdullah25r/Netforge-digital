@@ -5,6 +5,7 @@ import ValuesGrid from "../../../components/sections/ValuesGrid";
 import TeamSection from "../../../components/sections/TeamSection";
 import CodeTyperSection from "../../../components/sections/CodeTyperSection";
 import CTASection from "../../../components/sections/CTASection";
+import { getAboutContent } from "../../../data/team";
 
 export const metadata: Metadata = {
   title: "About — NetForge Digital",
@@ -12,13 +13,15 @@ export const metadata: Metadata = {
     "Meet the lean team of obsessives behind NetForge Digital — Dubai's results-first web development and marketing agency.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const about = await getAboutContent();
+  // console.log("About content:", about);
   return (
     <>
-      <AboutHero />
-      <ManifestoSection />
-      <ValuesGrid />
-      <TeamSection />
+      <AboutHero headline={about.headline} subheadline={about.subheadline} />
+      <ManifestoSection paragraphs={about.manifestoParagraphs} />
+      <ValuesGrid values={about.values} heading={about.valuesHeading} />
+      <TeamSection team={about.team} heading={about.teamHeading} />
       <CodeTyperSection />
       <CTASection />
     </>

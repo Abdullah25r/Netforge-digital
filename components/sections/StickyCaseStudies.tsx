@@ -2,12 +2,13 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "@phosphor-icons/react";
-import { caseStudies } from "../../data/portfolio";
-import GlassCard from "../ui/GlassCard";
+import type { CaseStudy } from "../../data/portfolio";
+import GlassCard from "../../components/ui/GlassCard";
 
-export default function StickyCaseStudies() {
+export default function StickyCaseStudies({ caseStudies }: { caseStudies: CaseStudy[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -19,6 +20,8 @@ export default function StickyCaseStudies() {
   const gap = 32;
   const totalWidth = caseStudies.length * (cardWidth + gap);
   const x = useTransform(scrollYProgress, [0, 1], ["0px", `-${totalWidth - cardWidth}px`]);
+
+  if (caseStudies.length === 0) return null;
 
   return (
     <>
@@ -45,7 +48,7 @@ export default function StickyCaseStudies() {
   );
 }
 
-function CaseCard({ cs }: { cs: (typeof caseStudies)[number] }) {
+function CaseCard({ cs }: { cs: CaseStudy }) {
   return (
     <div className="relative w-[85vw] max-w-[640px] h-[65vh] max-h-[560px] rounded-2xl overflow-hidden flex-shrink-0">
       <Image
@@ -85,13 +88,13 @@ function CaseCard({ cs }: { cs: (typeof caseStudies)[number] }) {
           <p className="font-display font-semibold text-lg mb-5" style={{ color: cs.accent }}>
             {cs.result}
           </p>
-          <a
-            href="#"
+          <Link
+            href={`/work/${cs.id}`}
             data-cursor-hover
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] hover:text-[var(--brand-cyan)] transition-colors"
           >
             View Case Study <ArrowUpRight size={16} weight="bold" />
-          </a>
+          </Link>
         </GlassCard>
       </div>
     </div>
