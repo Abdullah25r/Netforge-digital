@@ -11,6 +11,7 @@ type MagneticButtonProps = {
   href?: string;
   variant?: "primary" | "ghost";
   type?: "button" | "submit";
+  disabled?: boolean;
 };
 
 export default function MagneticButton({
@@ -20,6 +21,7 @@ export default function MagneticButton({
   href,
   variant = "primary",
   type = "button",
+  disabled = false,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -64,9 +66,11 @@ export default function MagneticButton({
         href={href}
         type={href ? undefined : type}
         onClick={onClick}
+        disabled={href ? undefined : disabled}
         className={cn(
           variant === "primary" ? "btn-primary" : "btn-ghost",
           "inline-flex items-center gap-2 select-none",
+          disabled && "opacity-70 pointer-events-none",
           className
         )}
       >

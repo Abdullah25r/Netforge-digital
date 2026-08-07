@@ -102,7 +102,7 @@ export default function HeroSection() {
       <motion.div
         initial={{ opacity: 1 }}
         whileInView={{ opacity: 1 }}
-        className="absolute bottom-10 inset-x-0 flex flex-col items-center gap-2 text-xs text-[var(--text-muted)] uppercase tracking-widest"
+        className="absolute bottom-24 inset-x-0 flex flex-col items-center gap-2 text-xs text-[var(--text-muted)] uppercase tracking-widest"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
