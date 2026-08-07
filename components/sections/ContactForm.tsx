@@ -7,17 +7,60 @@ import { CheckCircle, CaretDown, Check } from "@phosphor-icons/react";
 import GlassCard from "../ui/GlassCard";
 import MagneticButton from "../ui/MagneticButton";
 
-const GOALS = ["New Website", "Marketing Campaign", "SEO", "Social Media", "Full Retainer"];
-const BUDGETS = ["Under AED 2,000", "AED 2,000–5,000", "AED 5,000–10,000", "AED 10,000+"];
+const GOALS = [
+  { label: "New Website", value: "new-website" },
+  { label: "Marketing Campaign", value: "marketing-campaign" },
+  { label: "SEO", value: "seo" },
+  { label: "Social Media", value: "social-media" },
+  { label: "Full Retainer", value: "full-retainer" },
+];
+const BUDGETS = [
+  { label: "Under AED 2,000", value: "under-2000" },
+  { label: "AED 2,000–5,000", value: "2000-5000" },
+  { label: "AED 5,000–10,000", value: "5000-10000" },
+  { label: "AED 10,000+", value: "10000-plus" },
+];
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
-  const [goal, setGoal] = useState(GOALS[0]);
-  const [budget, setBudget] = useState(BUDGETS[0]);
+  const [goal, setGoal] = useState(GOALS[0].value);
+  const [budget, setBudget] = useState(BUDGETS[0].value);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setErrorMessage("");
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      fullName: String(formData.get("fullName") ?? ""),
+      businessName: String(formData.get("businessName") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      whatsappNumber: String(formData.get("whatsappNumber") ?? ""),
+      primaryGoal: goal,
+      monthlyBudget: budget,
+      message: String(formData.get("message") ?? ""),
+    };
+
+    try {
+      const res = await fetch("/api/contact-submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error("Submission failed");
+      }
+
+      setSubmitted(true);
+    } catch {
+      setErrorMessage("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,19 +96,19 @@ export default function ContactForm() {
           >
             <div className="grid sm:grid-cols-2 gap-5">
               <Field label="Full Name">
-                <input required type="text" className="form-input" placeholder="Your name" />
+                <input required name="fullName" type="text" className="form-input" placeholder="Your name" />
               </Field>
               <Field label="Business Name">
-                <input required type="text" className="form-input" placeholder="Your company" />
+                <input required name="businessName" type="text" className="form-input" placeholder="Your company" />
               </Field>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5">
               <Field label="Email Address">
-                <input required type="email" className="form-input" placeholder="you@company.com" />
+                <input required name="email" type="email" className="form-input" placeholder="you@company.com" />
               </Field>
               <Field label="WhatsApp Number">
-                <input required type="tel" className="form-input" defaultValue="+971 " />
+                <input required name="whatsappNumber" type="tel" className="form-input" defaultValue="+971 " />
               </Field>
             </div>
 
@@ -79,12 +122,13 @@ export default function ContactForm() {
             </div>
 
             <Field label="Tell us about your project">
-              <textarea required rows={4} className="form-input resize-none" placeholder="What are you looking to build or grow?" />
+              <textarea required name="message" rows={4} className="form-input resize-none" placeholder="What are you looking to build or grow?" />
             </Field>
 
-            <MagneticButton type="submit" className="w-full justify-center mt-2">
-              Send Message →
+            <MagneticButton type="submit" className="w-full justify-center mt-2" disabled={isSubmitting}>
+              {isSubmitting ? "Sending..." : "Send Message →"}
             </MagneticButton>
+            {errorMessage ? <p className="text-sm text-red-400">{errorMessage}</p> : null}
           </motion.form>
         )}
       </AnimatePresence>
@@ -128,7 +172,7 @@ function SelectField({
 }: {
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  options: { label: string; value: string }[];
 }) {
   return (
     <Select.Root value={value} onValueChange={onChange}>
@@ -150,12 +194,12 @@ function SelectField({
           <Select.Viewport>
             {options.map((opt) => (
               <Select.Item
-                key={opt}
-                value={opt}
+                key={opt.value}
+                value={opt.value}
                 data-cursor-hover
                 className="text-sm px-3 py-2.5 rounded-md flex items-center justify-between gap-2 outline-none cursor-pointer data-[highlighted]:bg-[var(--brand-cyan)]/10 data-[highlighted]:text-[var(--brand-cyan)]"
               >
-                <Select.ItemText>{opt}</Select.ItemText>
+                <Select.ItemText>{opt.label}</Select.ItemText>
                 <Select.ItemIndicator>
                   <Check size={14} />
                 </Select.ItemIndicator>
