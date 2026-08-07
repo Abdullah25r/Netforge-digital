@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPayloadClient } from "../../../../lib/payload";
+import { getPayloadClient } from "../../../lib/payload";
 
 const GOALS = new Set([
   "new-website",
