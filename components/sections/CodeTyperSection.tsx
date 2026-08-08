@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import CodeTyper from "../ui/CodeTyper";
+import CodeTyper from "../../components/ui/CodeTyper";
 import { fadeUp, staggerContainer } from "../../lib/utils";
 
 const STACK = [

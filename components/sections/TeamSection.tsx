@@ -53,14 +53,32 @@ export default function TeamSection({
                 </div>
                 <h3 className="font-display font-semibold">{member.name}</h3>
                 <p className="text-sm text-[var(--text-secondary)] mb-4">{member.role}</p>
-                <div className="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <a href="#" data-cursor-hover className="text-[var(--text-secondary)] hover:text-[var(--brand-cyan)]">
-                    <LinkedinLogo size={18} />
-                  </a>
-                  <a href="#" data-cursor-hover className="text-[var(--text-secondary)] hover:text-[var(--brand-cyan)]">
-                    <TwitterLogo size={18} />
-                  </a>
-                </div>
+                {(member.linkedin || member.x) && (
+                  <div className="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {member.linkedin && (
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-cursor-hover
+                        className="text-[var(--text-secondary)] hover:text-[var(--brand-cyan)]"
+                      >
+                        <LinkedinLogo size={18} />
+                      </a>
+                    )}
+                    {member.x && (
+                      <a
+                        href={member.x}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-cursor-hover
+                        className="text-[var(--text-secondary)] hover:text-[var(--brand-cyan)]"
+                      >
+                        <TwitterLogo size={18} />
+                      </a>
+                    )}
+                  </div>
+                )}
               </GlassCard>
             </motion.div>
           ))}

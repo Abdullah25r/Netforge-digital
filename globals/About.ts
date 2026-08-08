@@ -20,27 +20,104 @@ export const About: GlobalConfig = {
       admin: { initCollapsed: false },
       fields: [
         {
+          name: 'eyebrow',
+          type: 'text',
+          label: 'Eyebrow Label',
+          defaultValue: 'About NetForge',
+        },
+        {
           name: 'headline',
           type: 'text',
           required: true,
           label: 'Headline',
-          defaultValue: "We're a Lean Team of Obsessives Who Hate Average Results",
+          defaultValue: 'Building Digital Solutions That Drive Real Impact',
         },
         {
           name: 'subheadline',
           type: 'textarea',
           label: 'Subheadline',
           defaultValue:
-            'No account bloat, no junior hand-offs. Every project runs through senior hands, start to finish.',
+            'NetForge is a creative digital agency focused on turning ideas into powerful digital experiences. We blend strategy, design, and development to help businesses grow and stand out in the digital world.',
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            description: 'Office / team photo shown on the right side of the hero.',
+          },
+        },
+        {
+          name: 'stats',
+          type: 'array',
+          label: 'Hero Stats',
+          minRows: 2,
+          maxRows: 4,
+          defaultValue: [
+            { value: '50+', label: 'Projects Completed' },
+            { value: '30+', label: 'Happy Clients' },
+          ],
+          fields: [
+            {
+              name: 'value',
+              type: 'text',
+              required: true,
+              admin: { description: 'e.g. "50+"' },
+            },
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              admin: { description: 'e.g. "Projects Completed"' },
+            },
+          ],
         },
       ],
     },
 
-    // ── Manifesto ──
+    // ── Mission & Vision ──
+    {
+      type: 'collapsible',
+      label: 'Mission & Vision',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'missionTitle',
+          type: 'text',
+          label: 'Mission Title',
+          defaultValue: 'Our Mission',
+        },
+        {
+          name: 'missionText',
+          type: 'textarea',
+          required: true,
+          label: 'Mission Text',
+          defaultValue:
+            'To empower businesses with innovative digital solutions that drive growth, enhance experiences, and create lasting impact.',
+        },
+        {
+          name: 'visionTitle',
+          type: 'text',
+          label: 'Vision Title',
+          defaultValue: 'Our Vision',
+        },
+        {
+          name: 'visionText',
+          type: 'textarea',
+          required: true,
+          label: 'Vision Text',
+          defaultValue:
+            'To become a leading digital agency known for creativity, reliability, and results that set new standards in the industry.',
+        },
+      ],
+    },
+
+    // ── Manifesto (kept — unrelated to this redesign, still used elsewhere) ──
     {
       type: 'collapsible',
       label: 'Manifesto',
-      admin: { initCollapsed: false },
+      admin: { initCollapsed: true },
       fields: [
         {
           name: 'manifestoParagraphs',
@@ -83,18 +160,32 @@ export const About: GlobalConfig = {
           defaultValue: 'Our Values',
         },
         {
+          name: 'valuesSubheading',
+          type: 'text',
+          label: 'Section Subheading',
+          defaultValue: 'The principles that drive everything we do',
+        },
+        {
           name: 'values',
           type: 'array',
           label: 'Value Cards',
           minRows: 1,
           maxRows: 8,
+          defaultValue: [
+            { title: 'Innovation', description: 'We embrace new ideas and technologies to deliver smarter solutions.' },
+            { title: 'Integrity', description: 'Honest, transparent, and committed to our promises.' },
+            { title: 'Collaboration', description: 'We work closely with our clients as partners in their success.' },
+            { title: 'Excellence', description: 'Focused on quality, delivering results that exceed expectations.' },
+          ],
           fields: [
             {
-              name: 'emoji',
-              type: 'text',
+              name: 'icon',
+              type: 'upload',
+              relationTo: 'media',
               required: true,
-              maxLength: 4,
-              admin: { description: 'A single emoji, e.g. 🎯' },
+              admin: {
+                description: 'Small line-icon image representing this value — square, transparent background recommended.',
+              },
             },
             {
               name: 'title',
@@ -111,7 +202,166 @@ export const About: GlobalConfig = {
       ],
     },
 
-    // ── Team ──
+    // ── What We Do ──
+    {
+      type: 'collapsible',
+      label: 'What We Do',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'whatWeDoHeading',
+          type: 'text',
+          label: 'Section Heading',
+          defaultValue: 'What We Do',
+        },
+        {
+          name: 'whatWeDoSubheading',
+          type: 'textarea',
+          label: 'Section Subheading',
+          defaultValue:
+            'From strategy to execution, we offer a full range of digital services to help your brand grow and succeed online.',
+        },
+        {
+          name: 'whatWeDoImage',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            description: 'Decorative graphic shown next to the checklist.',
+          },
+        },
+        {
+          name: 'whatWeDoItems',
+          type: 'array',
+          label: 'Checklist Items',
+          minRows: 1,
+          maxRows: 10,
+          defaultValue: [
+            { item: 'Website Design & Development' },
+            { item: 'UI/UX Design' },
+            { item: 'Branding & Identity' },
+            { item: 'Digital Marketing' },
+            { item: 'E-commerce Solutions' },
+            { item: 'Custom Software Development' },
+          ],
+          fields: [
+            {
+              name: 'item',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── CTA Duo ("Let's Build Something Great Together") ──
+    {
+      type: 'collapsible',
+      label: "CTA — Let's Build Together",
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'ctaDuoHeading',
+          type: 'text',
+          label: 'Heading',
+          defaultValue: "Let's Build Something Great Together",
+        },
+        {
+          name: 'ctaDuoSubheading',
+          type: 'textarea',
+          label: 'Subheading',
+          defaultValue:
+            "We're passionate about what we do and even more passionate about the success of our clients.",
+        },
+        {
+          name: 'ctaDuoImage',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            description: 'Team photo shown on the right side of this section.',
+          },
+        },
+        {
+          name: 'ctaDuoFeatures',
+          type: 'array',
+          label: 'Feature Badges',
+          minRows: 2,
+          maxRows: 2,
+          defaultValue: [
+            {
+              icon: 'Target',
+              title: 'Client Focused',
+              description: 'Your success is our priority.',
+            },
+            {
+              icon: 'RocketLaunch',
+              title: 'Future Ready',
+              description: 'Solutions built for tomorrow.',
+            },
+          ],
+          fields: [
+            {
+              name: 'icon',
+              type: 'select',
+              required: true,
+              options: [
+                { label: 'Target', value: 'Target' },
+                { label: 'Rocket Launch', value: 'RocketLaunch' },
+                { label: 'Users Four', value: 'UsersFour' },
+                { label: 'Shield Check', value: 'ShieldCheck' },
+                { label: 'Lightbulb', value: 'Lightbulb' },
+              ],
+            },
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'description',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── Bottom CTA band ──
+    {
+      type: 'collapsible',
+      label: 'Bottom CTA',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'bottomCtaHeading',
+          type: 'text',
+          label: 'Heading',
+          defaultValue: 'Ready to Build Something Amazing?',
+        },
+        {
+          name: 'bottomCtaSubheading',
+          type: 'text',
+          label: 'Subheading',
+          defaultValue: "Let's turn your ideas into digital success.",
+        },
+        {
+          name: 'bottomCtaButtonText',
+          type: 'text',
+          label: 'Button Text',
+          defaultValue: 'Get Started',
+        },
+        {
+          name: 'bottomCtaButtonLink',
+          type: 'text',
+          label: 'Button Link',
+          defaultValue: '/contact',
+        },
+      ],
+    },
+
+    // ── Team (kept from before — social links added) ──
     {
       type: 'collapsible',
       label: 'Team',
@@ -147,6 +397,19 @@ export const About: GlobalConfig = {
               admin: {
                 description: 'Replaces the old initials avatar — square image recommended.',
               },
+            },
+            // ── add-on: social links, previously missing ──
+            {
+              name: 'linkedin',
+              type: 'text',
+              label: 'LinkedIn URL',
+              admin: { description: 'Full URL. Leave blank to hide the icon on the frontend.' },
+            },
+            {
+              name: 'x',
+              type: 'text',
+              label: 'X (Twitter) URL',
+              admin: { description: 'Full URL. Leave blank to hide the icon on the frontend.' },
             },
           ],
         },
